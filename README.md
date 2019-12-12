@@ -1,1 +1,1 @@
-﻿Forth lab: polynomial
+﻿mp2-lab4-polynomial
