@@ -1,14 +1,12 @@
 #pragma once
-#include <iostream>
 
 template <class T>
 struct Node
 {
 	Node(const Node& copyNode);
-	Node(T Data);
+	Node(T Data = 0);
 	T data;
 	Node* next;
-	Node* previous;
 };
 
 template <class T>
@@ -16,26 +14,42 @@ class List
 {
 public:
 	List(const List& copyList);
-	List() : begin(nullptr), end(nullptr), size(0) {}
+	List() : begin(nullptr), size(0) {}
 	void push_back(T element);
 	void pop_back();
+	void pop_front();
+	List& operator=(const List&);
+	T getElement(int index) const;
+	int getSize() { return size; }
+	void changeElement(int index, T element);
 	~List();
 private:
 	Node<T>* begin;
-	Node<T>* end;
 	int size;
+	Node<T>* getEnd();
 };
 
 template <class T>
-Node<T>::Node(const Node& copyNode) : 
-	data(copyNode.data), next(copyNode.next), previous(copyNode.previous) {}
+Node<T>::Node(const Node& copyNode) :
+	data(copyNode.data), next(copyNode.next) {}
 
 template <class T>
-Node<T>::Node(T Data) : data(Data), next(nullptr), previous(nullptr) {}
+Node<T>::Node(T Data) : data(Data), next(nullptr) {}
 
 template <class T>
 List<T>::List(const List& copyList) : 
-	begin(copyList.begin), end(copyList.end), size(copyList.size)  {}
+	begin(copyList.begin), size(copyList.size)  {}
+
+template <class T>
+Node<T>* List<T>::getEnd()
+{
+	if (begin == nullptr)
+		throw("List is empty");
+	Node<T>* temp = begin;
+	while (temp->next != nullptr)
+		temp = temp->next;
+	return temp;
+}
 
 template<class T>
 void List<T>::push_back(T element)
@@ -43,15 +57,12 @@ void List<T>::push_back(T element)
 	if (begin == nullptr)
 	{
 		begin = new Node<T>(element);
-		end = begin;
 		size++;
 	}
 	else
 	{
-		Node<T>* temp = end;
+		Node<T>* temp = getEnd();
 		temp->next = new Node<T>(element);
-		end = temp->next;
-		temp->next->previous = temp;
 		size++;
 	}
 }
@@ -63,29 +74,90 @@ void List<T>::pop_back()
 		throw ("List is empty");
 	else
 	{
-		Node<T>* temp = end;
-		temp = temp->previous;
+		Node<T>* temp = begin;
+		if (temp->next != nullptr)
+			while (temp->next->next != nullptr)
+				temp = temp->next;
+		delete temp->next;
 		temp->next = nullptr;
-		end = temp;
+		size--;
+		if (size == 0)
+			begin = nullptr;
+	}
+}
+
+template<class T>
+void List<T>::pop_front()
+{
+	if (begin == nullptr)
+		throw ("List is empty");
+	else
+	{
+		Node<T>* temp = begin;
+		begin = temp->next;
+		delete temp;
 		size--;
 	}
 }
 
 template<class T>
-List<T>::~List()
+List<T>& List<T>::operator=(const List<T>& copyList)
 {
-	if (begin == nullptr)
-		return;
+	if (this == &copyList)
+		return *this;
+	delete this;
+	size = copyList.size;
+	if (copyList.begin == nullptr)
+	{
+		begin = nullptr;
+		return *this;
+	}
+	int i = 0;
+	Node<T>* copyTemp = copyList.begin;
+	Node<T>* temp = new Node<T>(copyTemp->data);
+	while (i != size)
+	{
+		copyTemp = copyTemp->next;
+		temp= temp = new Node<T>(copyTemp->data);
+		i++;
+	}
+	return *this;
+}
+
+template<class T>
+T List<T>::getElement(int index) const
+{
+
+	if (begin == 0 || index < 0 || index >= size)
+		throw("Error");
 	Node<T>* temp = begin;
-	while (temp->next != 0)
+	int i = 0;
+	while (i != index)
 	{
 		temp = temp->next;
-		delete temp->previous;
-		temp->previous->next = nullptr;
-		temp->previous = nullptr;
+		i++;
 	}
-	temp->previous = nullptr;
-	delete temp;
-	end = nullptr;
-	begin = nullptr;
+	return temp->data;
+}
+
+template<class T>
+void List<T>::changeElement(int index, T element)
+{
+	if (begin == 0 || index < 0 || index >= size)
+		throw("Error");
+	Node<T> * temp = begin;
+	int i = 0;
+	while (i != index)
+	{
+		temp = temp->next;
+		i++;
+	}
+	temp->data = element;
+}
+
+template<class T>
+List<T>::~List()
+{
+	while (begin != nullptr)
+		pop_front();
 }
