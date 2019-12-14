@@ -8,6 +8,10 @@ public:
 	Monom(const Monom& copyMonom);
 	Monom(std::string Coeff, std::string Power);
 	Monom(double Coeff, int Power);
+	friend bool operator==(const Monom&, const Monom&);
+	Monom operator+(const Monom& right);
+	Monom operator-(const Monom& right);
+	Monom operator*(const Monom& right);
 	double getCoeff() const { return coeff; }
 	int getPower() const { return power; }
 	void setCoeff(double Coeff) { coeff = Coeff; }
@@ -28,8 +32,12 @@ public:
 	Polynomial operator+(const Polynomial& right);
 	Polynomial operator-(const Polynomial& right);
 	Polynomial operator*(const Polynomial& right);
-	int getSize() { return size; }
+	double calculate(int x);
+	int getSize() const { return size; }
+	void setPol(std::string pol);
+	Monom returnMonom(int index) const;
 private:
 	List<Monom> data;
 	int size;
+	void addMonom(Monom);
 };

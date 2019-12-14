@@ -17,8 +17,11 @@ int main()
 		cout << "Enter x:\n";
 		double x;
 		cin >> x;
-		Polynomial pol3 = pol1 + pol2;
-		cout << "Sum: " <<pol1+pol2;
+		cout << "Sum: " << pol1 + pol2;
+		cout << "\nDifference: " << pol1 - pol2;
+		cout << "\nMultiply: " << pol1 * pol2;
+		cout << "\nPolynom1(x) = " << pol1.calculate(x);
+		cout << "\nPolynom2(x) = " << pol2.calculate(x);
 	}
 	catch (...)
 	{

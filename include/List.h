@@ -22,6 +22,7 @@ public:
 	T getElement(int index) const;
 	int getSize() { return size; }
 	void changeElement(int index, T element);
+	Node<T>* getBegin() { return begin; }
 	~List();
 private:
 	Node<T>* begin;
@@ -37,8 +38,29 @@ template <class T>
 Node<T>::Node(T Data) : data(Data), next(nullptr) {}
 
 template <class T>
-List<T>::List(const List& copyList) : 
-	begin(copyList.begin), size(copyList.size)  {}
+List<T>::List<T>(const List& copyList)
+{
+	if (copyList.begin == nullptr)
+	{
+		begin = nullptr;
+		size = 0;
+	}
+	else
+	{
+		int i = 0;
+		size = copyList.size;
+		Node<T>* copyTemp = copyList.begin;
+		begin = new Node<T>(copyTemp->data);
+		Node<T>* temp = begin;
+		while (i != size - 1)
+		{
+			copyTemp = copyTemp->next;
+			temp->next = new Node<T>(copyTemp->data);
+			temp = temp->next;
+			i++;
+		}
+	}
+}
 
 template <class T>
 Node<T>* List<T>::getEnd()

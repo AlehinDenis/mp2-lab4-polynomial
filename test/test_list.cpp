@@ -29,13 +29,17 @@ TEST(List, can_copy_list)
 {
 	List<int> l1;
 	ASSERT_NO_THROW(List<int> l2(l1));
+	List<int> l2(l1);
+	EXPECT_EQ(l1.getBegin(), l2.getBegin());
 }
 
 TEST(List, list_store_correct_data_after_copy)
 {
 	List<int> l1;
+	l1.push_back(5);
 	List<int> l2(l1);
 	EXPECT_EQ(l1.getSize(), l2.getSize());
+	EXPECT_NE(l1.getBegin(), l2.getBegin());
 }
 
 TEST(List, list_can_push_back)
