@@ -105,7 +105,8 @@ List<T>& List<T>::operator=(const List<T>& copyList)
 {
 	if (this == &copyList)
 		return *this;
-	delete this;
+	if (begin != nullptr)
+		delete this;
 	size = copyList.size;
 	if (copyList.begin == nullptr)
 	{
@@ -114,11 +115,13 @@ List<T>& List<T>::operator=(const List<T>& copyList)
 	}
 	int i = 0;
 	Node<T>* copyTemp = copyList.begin;
-	Node<T>* temp = new Node<T>(copyTemp->data);
-	while (i != size)
+	begin = new Node<T>(copyTemp->data);
+	Node<T>* temp = begin;
+	while (i != size - 1)
 	{
 		copyTemp = copyTemp->next;
-		temp= temp = new Node<T>(copyTemp->data);
+		temp->next = new Node<T>(copyTemp->data);
+		temp = temp->next;
 		i++;
 	}
 	return *this;
@@ -128,7 +131,7 @@ template<class T>
 T List<T>::getElement(int index) const
 {
 
-	if (begin == 0 || index < 0 || index >= size)
+	if (begin == nullptr || index < 0 || index >= size)
 		throw("Error");
 	Node<T>* temp = begin;
 	int i = 0;

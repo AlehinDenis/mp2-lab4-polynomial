@@ -28,6 +28,7 @@ public:
 	Polynomial operator+(const Polynomial& right);
 	Polynomial operator-(const Polynomial& right);
 	Polynomial operator*(const Polynomial& right);
+	int getSize() { return size; }
 private:
 	List<Monom> data;
 	int size;

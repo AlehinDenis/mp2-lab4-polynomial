@@ -108,7 +108,19 @@ TEST(List, list_can_equal_itself)
 	EXPECT_EQ(5, l1.getElement(0));
 }
 
-TEST(List, list_can_equal)
+TEST(List, list_can_equal_list_from_two_elements)
+{
+	List<int> l1;
+	l1.push_back(5);
+	l1.push_back(3);
+	List<int> l2;
+	ASSERT_NO_THROW(l2 = l1);
+	EXPECT_EQ(2, l2.getSize());
+	EXPECT_EQ(5, l2.getElement(0));
+	EXPECT_EQ(3, l2.getElement(1));
+}
+
+TEST(List, list_can_equal_list_from_one_element)
 {
 	List<int> l1;
 	l1.push_back(5);
@@ -117,7 +129,7 @@ TEST(List, list_can_equal)
 	EXPECT_EQ(1, l2.getSize());
 	EXPECT_EQ(5, l2.getElement(0));
 }
-/*
+
 TEST(List, list_can_equal_empty_list)
 {
 	List<int> l1;
@@ -125,4 +137,4 @@ TEST(List, list_can_equal_empty_list)
 	ASSERT_NO_THROW(l2 = l1);
 	EXPECT_EQ(0, l2.getSize());
 	ASSERT_ANY_THROW(l2.getElement(0));
-}*/
+}
